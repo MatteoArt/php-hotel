@@ -41,6 +41,7 @@ $hotels = [
 ];
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -54,37 +55,126 @@ $hotels = [
 <body>
     <h1 class="text-center">Php Hotel</h1>
 
-    <table class="table">
+    <form action="" method="get" class="w-25 p-3">
+        <div>
+            <label for="parking" class="form-label">Filtra per parcheggio:</label>
+            <select class="form-select" id="parking" name="parking">
+                <option value="" selected>Scegli</option>
+                <option value="true">Si</option>
+                <option value="false">No</option>
+            </select>
+
+        </div>
+        <div>
+            <label for="voto" class="form-label">Filtra per voto</label>
+            <input type="number" class="form-control" id="voto" name="voto" min="1" max="5">
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Filtra</button>
+    </form>
+
+    <table class="table mt-5">
         <thead>
             <tr>
-                <?php 
+                <?php
                 foreach ($hotels[0] as $key => $dato) {
                     echo "<th scope='col'>$key</th>";
-                }                
+                }
                 ?>
             </tr>
         </thead>
         <tbody>
-            <?php 
-            foreach ($hotels as $hotel) { ?>
+            <?php
+            if (isset($_GET["parking"]) && isset($_GET["voto"])) {
+                $isParking = $_GET["parking"];
+                $vote = intval($_GET["voto"]);
+                var_dump($vote);
+                //se è stata scelto di filtrare per parcheggio o per voto
+                if ($isParking === "true" || $vote > 0) {
+                    foreach ($hotels as $hotel) { ?><?php
+                                                    if (($hotel["parking"] && $isParking === "true") || ($vote > 0 && $hotel["vote"] >= $vote)) { ?>
             <tr>
-                <?php 
-                foreach ($hotel as $key => $dato) {
-                    if ($key === "parking") {
-                        if ($dato) {
-                            echo "<td>Si</td>";
-                        } else {
-                            echo "<td>No</td>";
+                <?php
+                                                        foreach ($hotel as $key => $dato) {
+                                                            if ($key === "parking") {
+                                                                if ($dato) {
+                                                                    echo "<td>Si</td>";
+                                                                } else {
+                                                                    echo "<td>No</td>";
+                                                                }
+                                                            } else {
+                                                                echo "<td>$dato</td>";
+                                                            }
+                                                        }
+
+                ?>
+            </tr> <?php
+                                                    }
+                                                }
+                    ?>
+    <?php
+                } elseif ($isParking === "true" && $vote > 0) {
+                    foreach ($hotels as $hotel) { ?><?php
+                        if (($hotel["parking"] && $isParking === "true")  && (($vote > 0) && ($hotel["vote"] >= $vote))) { ?>
+<tr>
+<?php
+                            foreach ($hotel as $key => $dato) {
+                                if ($key === "parking") {
+                                    if ($dato) {
+                                        echo "<td>Si</td>";
+                                    } else {
+                                        echo "<td>No</td>";
+                                    }
+                                } else {
+                                    echo "<td>$dato</td>";
+                                }
+                            }
+
+?>
+</tr><?php
+                }}}
+                else {
+                    foreach ($hotels as $hotel) { ?>
+        <tr>
+            <?php
+                        foreach ($hotel as $key => $dato) {
+                            if ($key === "parking") {
+                                if ($dato) {
+                                    echo "<td>Si</td>";
+                                } else {
+                                    echo "<td>No</td>";
+                                }
+                            } else {
+                                echo "<td>$dato</td>";
+                            }
                         }
-                    } else {
-                        echo "<td>$dato</td>";
+            ?>
+        </tr>
+    <?php
                     }
                 }
-                ?>
-            </tr>
-            <?php 
+                //come apro la pagina nessuna ricerca è stata effettuata e quindi mostro tutto
+            } else {
+                foreach ($hotels as $hotel) { ?>
+    <tr>
+        <?php
+                    foreach ($hotel as $key => $dato) {
+                        if ($key === "parking") {
+                            if ($dato) {
+                                echo "<td>Si</td>";
+                            } else {
+                                echo "<td>No</td>";
+                            }
+                        } else {
+                            echo "<td>$dato</td>";
+                        }
+                    }
+        ?>
+    </tr>
+<?php
+                }
             }
-            ?>
+?>
+
         </tbody>
     </table>
 </body>
