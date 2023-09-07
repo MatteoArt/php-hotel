@@ -70,7 +70,15 @@ $hotels = [
             <tr>
                 <?php 
                 foreach ($hotel as $key => $dato) {
-                    echo "<td>$dato</td>";
+                    if ($key === "parking") {
+                        if ($dato) {
+                            echo "<td>Si</td>";
+                        } else {
+                            echo "<td>No</td>";
+                        }
+                    } else {
+                        echo "<td>$dato</td>";
+                    }
                 }
                 ?>
             </tr>
