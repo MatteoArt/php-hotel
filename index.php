@@ -66,25 +66,19 @@ $hotels = [
         </thead>
         <tbody>
             <?php 
-            foreach ($hotels as $hotel) { 
-
+            foreach ($hotels as $hotel) { ?>
+            <tr>
+                <?php 
+                foreach ($hotel as $key => $dato) {
+                    echo "<td>$dato</td>";
+                }
+                ?>
+            </tr>
+            <?php 
             }
             ?>
         </tbody>
     </table>
-
-    
-    <?php /*
-    foreach ($hotels as $hotel) { ?>
-        <ul>
-            <?php foreach ($hotel as $dato) {
-                echo "<li>$dato</li>";
-            } ?>
-        </ul>
-    <?php
-    }
-    */
-    ?> 
 </body>
 
 </html>
