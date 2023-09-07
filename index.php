@@ -88,8 +88,27 @@ $hotels = [
                 $isParking = $_GET["parking"];
                 $vote = intval($_GET["voto"]);
                 var_dump($vote);
-                //se è stata scelto di filtrare per parcheggio o per voto
-                if ($isParking === "true" || $vote > 0) {
+                if ($isParking === "true" && $vote > 0) {
+                    foreach ($hotels as $hotel) { ?><?php
+                        if (($hotel["parking"] && $isParking === "true")  && (($vote > 0) && ($hotel["vote"] >= $vote))) { ?>
+<tr>
+<?php
+                            foreach ($hotel as $key => $dato) {
+                                if ($key === "parking") {
+                                    if ($dato) {
+                                        echo "<td>Si</td>";
+                                    } else {
+                                        echo "<td>No</td>";
+                                    }
+                                } else {
+                                    echo "<td>$dato</td>";
+                                }
+                            }
+
+?>
+</tr><?php
+                }}} //se è stata scelto di filtrare per parcheggio o per voto
+                elseif ($isParking === "true" || $vote > 0) {
                     foreach ($hotels as $hotel) { ?><?php
                                                     if (($hotel["parking"] && $isParking === "true") || ($vote > 0 && $hotel["vote"] >= $vote)) { ?>
             <tr>
@@ -112,26 +131,7 @@ $hotels = [
                                                 }
                     ?>
     <?php
-                } elseif ($isParking === "true" && $vote > 0) {
-                    foreach ($hotels as $hotel) { ?><?php
-                        if (($hotel["parking"] && $isParking === "true")  && (($vote > 0) && ($hotel["vote"] >= $vote))) { ?>
-<tr>
-<?php
-                            foreach ($hotel as $key => $dato) {
-                                if ($key === "parking") {
-                                    if ($dato) {
-                                        echo "<td>Si</td>";
-                                    } else {
-                                        echo "<td>No</td>";
-                                    }
-                                } else {
-                                    echo "<td>$dato</td>";
-                                }
-                            }
-
-?>
-</tr><?php
-                }}}
+                }
                 else {
                     foreach ($hotels as $hotel) { ?>
         <tr>
